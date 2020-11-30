@@ -53,7 +53,6 @@ class SiteUser(AbstractBaseUser):
 
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['']
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
