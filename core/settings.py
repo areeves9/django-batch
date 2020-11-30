@@ -88,9 +88,7 @@ DATABASES = {
 
 # Substitute custom Auth user model
 
-AUTH_USER_MODEL = 'accounts.User'
-
-
+AUTH_USER_MODEL = 'accounts.SiteUser'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators

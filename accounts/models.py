@@ -2,9 +2,12 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.contrib.auth.models import UserManager
 
 
-class User(AbstractBaseUser):
+class SiteUser(AbstractBaseUser):
+    objects = UserManager()
+    
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -17,8 +20,8 @@ class User(AbstractBaseUser):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = ['']
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['']
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
