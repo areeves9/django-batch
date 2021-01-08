@@ -1,14 +1,20 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-<div>
-    <h1>Hello</h1>
-
-    <form action="{% url 'accounts:login' %}" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <button class="" type="submit">Login</button>
-    </form>
+<h1>Login</h1>
+<div class="row">
+    <div class="col-6">
+        <form action="{% url 'accounts:login' %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="mt-2 mx-auto btn btn-block btn-dark" 
+                type="submit">
+                Login
+            </button>
+        </form>
+    </div>
 </div>
 
 {% endblock %}
