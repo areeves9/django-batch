@@ -2,18 +2,20 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
-<h1>Login</h1>
-<div class="row">
-    <div class="col-6">
-        <form action="{% url 'accounts:login' %}" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <button class="mt-2 mx-auto btn btn-block btn-dark" 
-                type="submit">
-                Login
-            </button>
-        </form>
+<div style="height: 500px;" class="container">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col-md-6 col-lg-4 col-12 bg-light border rounded">
+            <h2 class="mt-4 mb-4 text-center">Log In</h2>
+            <form action="{% url 'accounts:login' %}" method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button class="mx-auto btn btn-block btn-dark" 
+                    type="submit">
+                    Log In
+                </button>
+            </form>
+            <p class="mt-1">Need an <a href="{% url 'accounts:register' %}">account</a>?</p>
+        </div>
     </div>
 </div>
 

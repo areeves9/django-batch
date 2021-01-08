@@ -1,6 +1,20 @@
+{% load fontawesome_5 %}
+
 <nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">Navbar</span>
-    {% if request.user %}
-    <p>{{ request.user }} is logged in...</p>
+    <span class="navbar-brand mb-0 h1"></span>
+    {% if request.user.is_authenticated %}
+    <p>
+        <a style="text-decoration: none; color: black;" href="{% url 'accounts:logout' %}">
+            {% fa5_icon 'sign-out-alt' 'fas' %}
+            Logout ({{request.user}})
+        </a> 
+    </p>
+    {% else %}
+    <p>
+        <a style="text-decoration: none; color: black;" href="{% url 'accounts:login' %}">
+            {% fa5_icon 'sign-in-alt' 'fas' %}
+            Login
+        </a> 
+    </p>
     {% endif %}
 </nav>
