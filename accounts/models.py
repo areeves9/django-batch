@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
@@ -65,7 +66,7 @@ class SiteUser(AbstractBaseUser):
         return True
 
     def get_absolute_url(self):
-        pass
+        return reverse("accounts:profile", kwargs={"pk": self.pk})
 
     def __str__(self):
         return str(self.email)
