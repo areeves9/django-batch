@@ -1,19 +1,34 @@
 import pytest
 from django.urls import reverse
 from django.test import RequestFactory, Client
-from django.contrib.auth import get_user_model
-from accounts.views import RegistrationView, UserDetailView
-from mixer.backend.django import Mixer
+from django.contrib.auth.models import AnonymousUser
+from accounts.views import RegistrationFormView
 
-User = get_user_model()
-mixer = Mixer(commit=False)
+def test_get_registration_view():
+    path = reverse('accounts:register')
+    factory = RequestFactory()
+    user = AnonymousUser()
+    request = factory.get(path)
+    request.user = user
+    response = RegistrationFormView(request=request)
+    assert response.template_name == 'registration/registration_form.html'
 
 @pytest.mark.django_db(transaction=True)
-def test_user_registration():
+def test_post_registration_view():
     path = reverse('accounts:register')
-    client = Client()
-    request = RequestFactory().get(path)
-    request.session = client.session
-    request.user = mixer.blend(User, email='theboss@aol.com')
-    response = RegistrationView(request=request)
-    assert request.user.get_absolute_url() == response.success_url() 
+    c = Client()
+    factory = RequestFactory()
+    user = AnonymousUser()
+    data = {
+        'email': 'jza@aol.com', 
+        'password1': '16zs_90!mm416', 
+        'password2': '16zs_90!mm416'
+    }
+    request = factory.post(path, data)
+    request.session = c.session
+    request.user = user
+    response = RegistrationFormView.as_view()(request=request)
+    assert response.url == reverse(
+        'accounts:profile', 
+        kwargs={'pk': request.user.pk}
+    )

@@ -5,7 +5,6 @@ from django.contrib.auth import (
     authenticate,
     login
 )
-
 from django.urls import reverse, reverse_lazy
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic.detail import DetailView
@@ -13,9 +12,9 @@ from .forms import LoginForm, RegistrationForm
 
 User = get_user_model()
 
-class RegistrationView(CreateView):
+class RegistrationFormView(CreateView):
     form_class = RegistrationForm
-    template_name = 'registration/registration.html'
+    template_name = 'registration/registration_form.html'
 
     def form_valid(self, form):
         valid = super().form_valid(form)
