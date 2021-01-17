@@ -1,6 +1,6 @@
 import pytest
-from django.urls import reverse
 from django.test import RequestFactory, Client
+from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
 from accounts.views import RegistrationFormView
 

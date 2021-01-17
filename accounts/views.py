@@ -1,4 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import (
     views,
     get_user_model,
@@ -12,9 +14,10 @@ from .forms import LoginForm, RegistrationForm
 
 User = get_user_model()
 
-class RegistrationFormView(CreateView):
+class RegistrationFormView(SuccessMessageMixin, CreateView):
     form_class = RegistrationForm
     template_name = 'registration/registration_form.html'
+    success_message = 'Welcome to the site %(email)s!'
 
     def form_valid(self, form):
         valid = super().form_valid(form)
