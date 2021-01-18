@@ -2,6 +2,8 @@ import pytest
 from django.test import RequestFactory, Client
 from django.urls import reverse
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.messages.middleware import MessageMiddleware
+from django.contrib.sessions.middleware import SessionMiddleware
 from accounts.views import RegistrationFormView
 
 def test_get_registration_view():
@@ -26,6 +28,12 @@ def test_post_registration_view():
     }
     request = factory.post(path, data)
     request.session = c.session
+    middleware = SessionMiddleware()
+    middleware.process_request(request)
+    request.session.save()  
+    middleware = MessageMiddleware()
+    middleware.process_request(request)
+    request.session.save()
     request.user = user
     response = RegistrationFormView.as_view()(request=request)
     assert response.url == reverse(
