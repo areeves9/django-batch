@@ -1,6 +1,6 @@
 import pytest
 from django.contrib.auth import get_user_model
-from django.urls import resolve 
+from django.urls import resolve
 from mixer.backend.django import Mixer
 
 User = get_user_model()
