@@ -15,6 +15,9 @@ User = get_user_model()
 
 
 class RegistrationFormView(SuccessMessageMixin, CreateView):
+    '''
+    Subclasses generic Django edit view CreateView.
+    '''
     form_class = RegistrationForm
     template_name = 'registration/registration_form.html'
     success_message = 'Welcome to the site %(email)s!'
@@ -29,6 +32,9 @@ class RegistrationFormView(SuccessMessageMixin, CreateView):
 
 
 class UserLoginView(SuccessMessageMixin, auth_views.LoginView):
+    '''
+    Subclasses LoginView from django.contrib.auth.
+    '''
     redirect_authenticated_user = True
     success_message = 'Welcome back %(username)s!'
 
@@ -42,12 +48,18 @@ class UserLoginView(SuccessMessageMixin, auth_views.LoginView):
 
 
 class UserProfileView(LoginRequiredMixin, DetailView):
+    '''
+    Displays detail about a given SiteUser instance.
+    '''
     model = User
     context_object_name = 'user'
     template_name = 'registration/profile.html'
 
 
 class UserProfileUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
+    '''
+    Edits fields for a given SiteUser instance.
+    '''
     model = User
     context_object_name = 'user'
     form_class = UserProfileUpdateForm

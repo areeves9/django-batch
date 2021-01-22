@@ -6,7 +6,7 @@
     <p>
         <a style="text-decoration: none; color: black;" href="{% url 'accounts:logout' %}">
             {% fa5_icon 'sign-out-alt' 'fas' %}
-            Logout ({{request.user}})
+            Logout (<a href="{% url 'accounts:profile' request.user.pk %}">{{request.user}}</a>)
         </a> 
     </p>
     {% else %}
