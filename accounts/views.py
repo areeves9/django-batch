@@ -42,3 +42,4 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
     context_object_name = 'user'
     template_name = 'registration/profile.html'
+    success_message = 'Welcome back!'

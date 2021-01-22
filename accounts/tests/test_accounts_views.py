@@ -3,13 +3,11 @@ from mixer.backend.django import Mixer
 from django.test import RequestFactory, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.contrib.auth import views as auth_views
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages import get_messages
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from accounts.views import UserProfileView, RegistrationFormView
-
 
 User = get_user_model()
 mixer = Mixer(commit=False, fake=True)
@@ -95,15 +93,16 @@ def test_redirect_anonymous_to_login_from_profile():
     assert response.url == '/accounts/login?next=/accounts/profile/10/'
 
 
+@pytest.mark.django_db(transaction=True)
 def test_redirect_authenticated_to_profile_from_login():
     path = reverse('accounts:login')
-    user = AnonymousUser()
-    factory = RequestFactory()
+    c = Client()
+    user = User.objects.create_user(email='az@gmail.com')
+    user.set_password('waterwater12')
+    user.save()
     data = {
-        'email': 'b@aol.com',
-        'password': 'milkmilk12'
+        'username': 'az@gmail.com',
+        'password': 'waterwater12',
     }
-    request = factory.post(path, data)
-    request.user = user
-    response = auth_views.LoginView.as_view()(request)
-    assert response.template_name == 'registration/profile.html'
+    response = c.post(path, data=data)
+    assert response.url == user.get_absolute_url()
