@@ -5,8 +5,8 @@ from django.contrib.auth import (
     login
 )
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
 from .forms import RegistrationForm
@@ -29,6 +29,7 @@ class RegistrationFormView(SuccessMessageMixin, CreateView):
 
 
 class UserLoginView(SuccessMessageMixin, auth_views.LoginView):
+    redirect_authenticated_user = True
     success_message = 'Welcome back %(username)s!'
 
     def get_success_url(self):
@@ -44,3 +45,10 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
     context_object_name = 'user'
     template_name = 'registration/profile.html'
+
+
+class UserProfileUpdateView(UserPassesTestMixin, UpdateView):
+    model = User
+
+    def test_func(self):
+        return self.request.user.pk == self.object.pk
