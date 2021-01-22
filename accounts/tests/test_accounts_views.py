@@ -52,15 +52,30 @@ def test_post_registrationview():
 def test_post_registrationview_success_message():
     path = reverse('accounts:register')
     c = Client()
-    user = mixer.blend(User)
     data = {
-        'email': f'{user.email}',
+        'email': 'az@gmail.com',
         'password1': '16zs_90!mm416',
         'password2': '16zs_90!mm416',
     }
     response = c.post(path, data)
     messages = list(get_messages(response.wsgi_request))
-    assert str(messages[0]) == f'Welcome to the site {user.email}!'
+    assert str(messages[0]) == 'Welcome to the site az@gmail.com!'
+
+
+@pytest.mark.django_db(transaction=True)
+def test_post_loginview_success_message():
+    path = reverse('accounts:login')
+    c = Client()
+    user = User.objects.create_user(email='az@gmail.com')
+    user.set_password('waterwater12')
+    user.save()
+    data = {
+        'username': 'az@gmail.com',
+        'password': 'waterwater12',
+    }
+    response = c.post(path, data=data)
+    messages = list(get_messages(response.wsgi_request))
+    assert str(messages[0]) == f'Welcome back {user.email}!'
 
 
 @pytest.fixture
@@ -68,7 +83,7 @@ def test_post_registrationview_success_message():
 def user():
     user = mixer.blend(User)
     return User.objects.create_user(
-        email=f'{user.email}', 
+        email=f'{user.email}',
         password='password123'
     )
 
@@ -94,14 +109,13 @@ def test_redirect_anonymous_to_login_from_profile():
 
 
 @pytest.mark.django_db(transaction=True)
-def test_redirect_authenticated_to_profile_from_login():
+def test_redirect_authenticated_to_profile_from_login(user):
     path = reverse('accounts:login')
     c = Client()
-    user = User.objects.create_user(email='az@gmail.com')
     user.set_password('waterwater12')
     user.save()
     data = {
-        'username': 'az@gmail.com',
+        'username': user.email,
         'password': 'waterwater12',
     }
     response = c.post(path, data=data)

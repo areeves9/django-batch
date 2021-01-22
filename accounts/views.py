@@ -28,7 +28,9 @@ class RegistrationFormView(SuccessMessageMixin, CreateView):
         return valid
 
 
-class UserLoginView(auth_views.LoginView):
+class UserLoginView(SuccessMessageMixin, auth_views.LoginView):
+    success_message = 'Welcome back %(username)s!'
+
     def get_success_url(self):
         return reverse_lazy(
             'accounts:profile',
@@ -42,4 +44,3 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     model = User
     context_object_name = 'user'
     template_name = 'registration/profile.html'
-    success_message = 'Welcome back!'
