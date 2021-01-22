@@ -15,4 +15,5 @@ urlpatterns = [
         ), name='logout'),
     path('register', views.RegistrationFormView.as_view(), name='register'),
     path('profile/<int:pk>/', views.UserProfileView.as_view(), name='profile'),
+    path('profile/<int:pk>/update/', views.UserProfileUpdateView.as_view(), name='profile_update'),
 ]

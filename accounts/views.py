@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
 from django.urls import reverse_lazy
-from .forms import RegistrationForm
+from .forms import RegistrationForm, UserProfileUpdateForm
 
 User = get_user_model()
 
@@ -47,8 +47,12 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     template_name = 'registration/profile.html'
 
 
-class UserProfileUpdateView(UserPassesTestMixin, UpdateView):
+class UserProfileUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = User
+    context_object_name = 'user'
+    form_class = UserProfileUpdateForm
+    success_message = 'Profile Updated!'
+    template_name = 'registration/user_profile_update_form.html'
 
     def test_func(self):
-        return self.request.user.pk == self.object.pk
+        return self.request.user.pk == self.get_object().pk

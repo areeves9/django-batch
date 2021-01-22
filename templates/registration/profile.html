@@ -7,7 +7,10 @@
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-md-6 col-lg-4 col-10 bg-light border rounded">
             <h2 class="mt-4 mb-4 text-center">{{ user }} Profile {{ user.pk }}</h2>
-            
+            <p>{{ user.first_name }} {{ user.last_name }}</p>
+            {% if request.user == user %}
+            <a class="d-block text-center" href="{% url 'accounts:profile_update' user.pk %}">Update Profile</a>
+            {% endif %}
         </div>
     </div>
 </div>

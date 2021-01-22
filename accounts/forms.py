@@ -9,6 +9,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class UserProfileUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name',)
+
+
 class LoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
