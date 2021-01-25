@@ -1,19 +1,39 @@
 from . import views
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from accounts.views import UserLoginView
 from accounts.forms import LoginForm
 
 app_name = 'accounts'
 
 urlpatterns = [
-    path('login', UserLoginView.as_view(
-        form_class=LoginForm
-        ), name='login'),
-    path('logout', auth_views.LogoutView.as_view(
-        template_name='registration/logged_out.html'
-        ), name='logout'),
-    path('register', views.RegistrationFormView.as_view(), name='register'),
-    path('profile/<int:pk>/', views.UserProfileView.as_view(), name='profile'),
-    path('profile/<int:pk>/update/', views.UserProfileUpdateView.as_view(), name='profile_update'),
+    path(
+        'login', views.UserLoginView.as_view(
+            form_class=LoginForm
+        ), name='login'
+    ),
+    path(
+        'logout', auth_views.LogoutView.as_view(
+            template_name='registration/logged_out.html'
+        ), name='logout'
+    ),
+    path(
+        'register',
+        views.RegistrationFormView.as_view(),
+        name='register'
+    ),
+    path(
+        'password-change',
+        views.UserPasswordChangeView.as_view(),
+        name='password_change'
+    ),
+    path(
+        'profile/<uuid:unique_id>/',
+        views.UserProfileView.as_view(),
+        name='profile'
+    ),
+    path(
+        'profile/<uuid:unique_id>/update/',
+        views.UserProfileUpdateView.as_view(),
+        name='profile_update'
+    ),
 ]

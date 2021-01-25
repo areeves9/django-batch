@@ -1,20 +1,44 @@
 {% load fontawesome_5 %}
 
-<nav class="navbar navbar-light bg-light border">
-    <span class="navbar-brand mb-0 h1"></span>
-    {% if request.user.is_authenticated %}
-    <p>
-        <a style="text-decoration: none; color: black;" href="{% url 'accounts:logout' %}">
-            {% fa5_icon 'sign-out-alt' 'fas' %}
-            Logout (<a href="{% url 'accounts:profile' request.user.pk %}">{{request.user}}</a>)
-        </a> 
-    </p>
-    {% else %}
-    <p>
-        <a style="text-decoration: none; color: black;" href="{% url 'accounts:login' %}">
-            {% fa5_icon 'sign-in-alt' 'fas' %}
-            Login
-        </a> 
-    </p>
-    {% endif %}
+<nav class="mb-5 navbar navbar-expand-lg navbar-light bg-light border">
+    <span class="navbar-brand mb-0 h1">Brand</span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            {% if request.user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" style="text-decoration: none; color: black;" 
+                    href="{% url 'accounts:logout' %}">
+                    Logout {% fa5_icon 'sign-out-alt' 'fas' %}
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" style="text-decoration: none; color: black;"  
+                    href="{% url 'accounts:profile' request.user.unique_id %}">
+                        ({{request.user}})
+                </a>
+            </li>
+             
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" style="text-decoration: none; color: black;" 
+                    href="{% url 'accounts:register' %}">
+                    {% fa5_icon 'profile' 'fas' %}
+                    Register
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="text-decoration: none; color: black;" 
+                    href="{% url 'accounts:login' %}">
+                    {% fa5_icon 'sign-in-alt' 'fas' %}
+                    Login
+                </a> 
+            </li>     
+            {% endif %}
+        </ul>
+    </div>
 </nav>

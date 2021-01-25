@@ -44,7 +44,7 @@ def test_post_registrationview():
     response = RegistrationFormView.as_view()(request=request)
     assert response.url == reverse(
         'accounts:profile',
-        kwargs={'pk': request.user.pk}
+        kwargs={'unique_id': request.user.unique_id}
     )
 
 
@@ -94,18 +94,18 @@ def test_get_userprofileview(user):
     path = user.get_absolute_url()
     request = factory.get(path)
     request.user = user
-    response = UserProfileView.as_view()(request=request, pk=request.user.pk)
+    response = UserProfileView.as_view()(request=request, unique_id=request.user.unique_id)
     assert response.template_name == ['registration/profile.html']
 
 
 def test_redirect_anonymous_to_login_from_profile():
-    path = reverse('accounts:profile', kwargs={'pk': 10})
+    path = reverse('accounts:profile', kwargs={'unique_id': '8db49825-244b-4ee9-a857-4da3cf40f380'})
     user = AnonymousUser()
     factory = RequestFactory()
     request = factory.get(path)
     request.user = user
-    response = UserProfileView.as_view()(request, pk=10)
-    assert response.url == '/accounts/login?next=/accounts/profile/10/'
+    response = UserProfileView.as_view()(request, unique_id='8db49825-244b-4ee9-a857-4da3cf40f380')
+    assert response.url == '/accounts/login?next=/accounts/profile/8db49825-244b-4ee9-a857-4da3cf40f380/'
 
 
 @pytest.mark.django_db(transaction=True)

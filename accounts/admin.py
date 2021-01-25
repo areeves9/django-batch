@@ -4,7 +4,7 @@ from accounts.models import SiteUser
 
 
 class SiteUserAdmin(admin.ModelAdmin):
-    pass
+    fields = ('email', 'unique_id',)
 
 
 admin.site.register(SiteUser, SiteUserAdmin)

@@ -1,3 +1,4 @@
+import uuid
 from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import (
@@ -39,6 +40,12 @@ class SiteUserManager(BaseUserManager):
 class SiteUser(AbstractBaseUser):
     objects = SiteUserManager()
 
+    unique_id = models.UUIDField(
+        primary_key=False,
+        default=uuid.uuid4,
+        editable=False,
+        unique=True,
+    )
     email = models.EmailField(
         verbose_name='email address',
         max_length=255,
@@ -66,7 +73,7 @@ class SiteUser(AbstractBaseUser):
         return True
 
     def get_absolute_url(self):
-        return reverse("accounts:profile", kwargs={"pk": self.pk})
+        return reverse("accounts:profile", kwargs={"unique_id": self.unique_id})
 
     def __str__(self):
         return str(self.email)

@@ -139,9 +139,12 @@ STATIC_URL = '/static/'
 
 
 # Email settings
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
-EMAIL_HOST_PASSWORD = os.environ['EMAIL_PW']
-EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.environ['FROM_EMAIL']
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = os.environ['EMAIL_HOST_USER']
+# EMAIL_HOST_PASSWORD = os.environ['EMAIL_PW']
+# EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = os.environ['FROM_EMAIL']
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only

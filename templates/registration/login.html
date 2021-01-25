@@ -6,7 +6,7 @@
     {% include 'django_messages.html' %}
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-md-6 col-lg-4 col-10 bg-light border rounded">
-            <h2 class="mt-4 mb-4 text-center">Log In</h2>
+            <h2 class="mt-4 mb-4 text-left">Log In</h2>
             <form action="{% url 'accounts:login' %}" method="post">
                 {% csrf_token %}
                 {{ form|crispy }}
@@ -17,6 +17,8 @@
             </form>
             <hr/>
             <p class="mt-1">Need an <a href="{% url 'accounts:register' %}">account</a>?</p>
+            <p class="mt-1">Forgot <a href="{% url 'password_reset' %}">password</a>?</p>
+
         </div>
     </div>
 </div>

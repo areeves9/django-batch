@@ -15,5 +15,5 @@ class TestUrls:
         assert resolve(path).view_name == 'accounts:register'
 
     def test_profile_url(self):
-        path = reverse('accounts:profile', kwargs={'pk': 7})
+        path = reverse('accounts:profile', kwargs={'unique_id': '8db49825-244b-4ee9-a857-4da3cf40f380'})
         assert resolve(path).view_name == 'accounts:profile'

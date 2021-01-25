@@ -3,14 +3,14 @@
 
 {% block content %}
 <div style="height: 500px;" class="container">
-    {% include 'django_messages.html' %}
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-md-6 col-lg-4 col-10 bg-light border rounded">
+            {% include 'django_messages.html' %}
             <h2 class="mt-4 mb-4 text-left">{{ user }} Profile</h2>
             <p class="text-left">{{ user.first_name }} {{ user.last_name }}</p>
             <hr/>
             {% if request.user == user %}
-            <a class="d-block mb-3" href="{% url 'accounts:profile_update' user.pk %}">Update Profile</a>
+            <a class="d-block mb-3" href="{% url 'accounts:profile_update' user.unique_id %}">Update Profile</a>
             {% endif %}
         </div>
     </div>

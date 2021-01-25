@@ -42,7 +42,7 @@ class UserLoginView(SuccessMessageMixin, auth_views.LoginView):
         return reverse_lazy(
             'accounts:profile',
             kwargs={
-                'pk': self.request.user.pk
+                'unique_id': self.request.user.unique_id
             }
         )
 
@@ -53,18 +53,38 @@ class UserProfileView(LoginRequiredMixin, DetailView):
     '''
     model = User
     context_object_name = 'user'
+    slug_field = 'unique_id'
+    slug_url_kwarg = 'unique_id'
     template_name = 'registration/profile.html'
 
 
-class UserProfileUpdateView(SuccessMessageMixin, UserPassesTestMixin, UpdateView):
+class UserProfileUpdateView(
+    SuccessMessageMixin,
+    UserPassesTestMixin,
+    UpdateView
+):
     '''
     Edits fields for a given SiteUser instance.
     '''
     model = User
     context_object_name = 'user'
     form_class = UserProfileUpdateForm
+    slug_field = 'unique_id'
+    slug_url_kwarg = 'unique_id'
     success_message = 'Profile Updated!'
     template_name = 'registration/user_profile_update_form.html'
 
     def test_func(self):
         return self.request.user.pk == self.get_object().pk
+
+
+class UserPasswordChangeView(SuccessMessageMixin, auth_views.PasswordChangeView):
+    success_message = 'Password changed successfully.'
+
+    def get_success_url(self):
+        return reverse_lazy(
+            'accounts:profile',
+            kwargs={
+                'unique_id': self.request.user.unique_id
+            }
+        )
