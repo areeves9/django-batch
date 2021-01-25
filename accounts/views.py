@@ -42,7 +42,8 @@ class RegistrationFormView(SuccessMessageMixin, CreateView):
     '''
     form_class = RegistrationForm
     template_name = 'registration/registration_form.html'
-    success_message = 'Welcome to the site %(email)s!'
+    success_url = 'registration/registration_complete.html'
+    success_message = 'Please check your email, %(email)s, for confirmation.'
 
     def form_valid(self, form):
         valid = super().form_valid(form)

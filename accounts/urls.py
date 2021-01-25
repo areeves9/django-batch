@@ -1,5 +1,6 @@
 from . import views
 from django.urls import path
+from django.views.generic.base import TemplateView
 from django.contrib.auth import views as auth_views
 from accounts.forms import LoginForm
 
@@ -22,7 +23,7 @@ urlpatterns = [
         name='register'
     ),
     path(
-        'password-change',
+        'password/change',
         views.UserPasswordChangeView.as_view(),
         name='password_change'
     ),
@@ -40,4 +41,9 @@ urlpatterns = [
         ),
         name='profile_update'
     ),
+    path(
+        'registration/complete/',
+        TemplateView.as_view(template_name='registration/registration_complete.html'),
+        name='registration_complete'
+    )
 ]
