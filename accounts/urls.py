@@ -28,12 +28,16 @@ urlpatterns = [
     ),
     path(
         'profile/<uuid:unique_id>/',
-        views.UserProfileView.as_view(),
+        views.UserProfileView.as_view(
+            template_name='accounts/profile.html'
+        ),
         name='profile'
     ),
     path(
         'profile/<uuid:unique_id>/update/',
-        views.UserProfileUpdateView.as_view(),
+        views.UserProfileUpdateView.as_view(
+            template_name='accounts/user_profile_update_form.html'
+        ),
         name='profile_update'
     ),
 ]
