@@ -1,3 +1,9 @@
+from accounts.tokens import account_activation_token
+from .forms import RegistrationForm, UserProfileUpdateForm
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import (
     get_user_model,
@@ -6,12 +12,28 @@ from django.contrib.auth import (
 )
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.detail import DetailView
-from django.urls import reverse_lazy
-from .forms import RegistrationForm, UserProfileUpdateForm
 
 User = get_user_model()
+
+
+class Activate(View):
+    def get(self, request, uidb64, token):
+        try:
+            uid = force_text(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=uid)
+        except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+            user = None
+        if user is not None and account_activation_token.check_token(user, token):
+            # activate user and login:
+            user.is_active = True
+            user.save()
+            login(request, user)
+            return redirect(user.get_absolute_url())
+        else:
+            return render(request, 'registration/activation_invalid.html')
 
 
 class RegistrationFormView(SuccessMessageMixin, CreateView):
