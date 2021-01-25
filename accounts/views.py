@@ -1,9 +1,13 @@
 from accounts.tokens import account_activation_token
-from .forms import RegistrationForm, UserProfileUpdateForm
+from accounts.forms import RegistrationForm, UserProfileUpdateForm
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
+from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import (
     get_user_model,
@@ -31,6 +35,8 @@ class Activate(View):
             user.is_active = True
             user.save()
             login(request, user)
+            success_message = 'Welcome to the site!'
+            messages.success(request, success_message)
             return redirect(user.get_absolute_url())
         else:
             return render(request, 'registration/activation_invalid.html')
@@ -39,19 +45,40 @@ class Activate(View):
 class RegistrationFormView(SuccessMessageMixin, CreateView):
     '''
     Subclasses generic Django edit view CreateView.
+    Override the post method to email user confirmation
+    URL containing uid and token.
     '''
     form_class = RegistrationForm
     template_name = 'registration/registration_form.html'
-    success_url = 'registration/registration_complete.html'
-    success_message = 'Please check your email, %(email)s, for confirmation.'
 
-    def form_valid(self, form):
-        valid = super().form_valid(form)
-        username = form.cleaned_data['email']
-        password = form.cleaned_data['password1']
-        user = authenticate(self.request, username=username, password=password)
-        login(self.request, user)
-        return valid
+    def get_success_url(self):
+        return reverse_lazy('accounts:registration_complete')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            to_email = form.cleaned_data['email']
+            form.save()
+            subject = 'Active your account.'
+            current_site = get_current_site(request)
+            message = render_to_string(
+                'registration/activation_email.html',
+                {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': urlsafe_base64_encode(force_bytes(form.instance.pk)),
+                    'token': account_activation_token.make_token(form.instance),
+                })
+            email = EmailMessage(subject, message, to=[to_email, ])
+            email.send()
+            success_message = f'Activation link sent to {user}'
+            messages.success(request, success_message)
+            return redirect(self.get_success_url())
+        else:
+            form = self.form_class()
+            return form
 
 
 class UserLoginView(SuccessMessageMixin, auth_views.LoginView):
