@@ -17,3 +17,4 @@ This project attempts to adhere to the requirements of PEP8 and was developed wi
 * Mixer
 * Bootstrap4
 * Django-Crispy-Forms
+* Conda
