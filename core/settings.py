@@ -146,5 +146,5 @@ STATIC_URL = '/static/'
 # EMAIL_USE_TLS = True
 # DEFAULT_FROM_EMAIL = os.environ['FROM_EMAIL']
 
- # During development only
+# During development only
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
