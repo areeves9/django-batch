@@ -1,5 +1,10 @@
 from accounts.tokens import account_activation_token
-from accounts.forms import RegistrationForm, UserProfileUpdateForm
+from accounts.forms import (
+    RegistrationForm,
+    UserProfileUpdateForm,
+    UserPasswordResetForm,
+    UserPasswordResetConfirmForm,
+)
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -128,7 +133,15 @@ class UserProfileUpdateView(
         return self.request.user.pk == self.get_object().pk
 
 
-class UserPasswordChangeView(SuccessMessageMixin, auth_views.PasswordChangeView):
+class UserPasswordChangeView(
+    SuccessMessageMixin,
+    auth_views.PasswordChangeView
+):
+    '''
+    User changes password by a link located
+    on their profile page.
+    '''
+    # form_class = UserPasswordChangeForm
     success_message = 'Password changed successfully.'
 
     def get_success_url(self):
@@ -138,3 +151,27 @@ class UserPasswordChangeView(SuccessMessageMixin, auth_views.PasswordChangeView)
                 'unique_id': self.request.user.unique_id
             }
         )
+
+
+class UserPasswordResetView(
+    SuccessMessageMixin,
+    auth_views.PasswordResetView
+):
+    '''
+    User enters email in form field and server
+    sends an email containing a URL where the user
+    can enter a new password.
+    '''
+    form_class = UserPasswordResetForm
+    success_message = 'An email has been sent.'
+
+
+class UserPasswordResetConfirmView(
+    SuccessMessageMixin,
+    auth_views.PasswordResetConfirmView
+):
+    '''
+    User enters new password and confirms.
+    '''
+    form_class = UserPasswordResetConfirmForm
+    success_message = 'Your password has been updated!'

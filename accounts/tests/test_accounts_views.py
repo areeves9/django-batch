@@ -23,59 +23,59 @@ def test_get_registrationview():
     assert response.template_name == 'registration/registration_form.html'
 
 
-@pytest.mark.django_db(transaction=True)
-def test_post_registrationview():
-    path = reverse('accounts:register')
-    factory = RequestFactory()
-    user = AnonymousUser()
-    data = {
-        'email': 'jza@aol.com',
-        'password1': '16zs_90!mm416',
-        'password2': '16zs_90!mm416',
-    }
-    request = factory.post(path, data)
-    request.user = user
-    middleware = SessionMiddleware(object)
-    middleware.process_request(request)
-    request.session.save()
-    middleware = MessageMiddleware(object)
-    middleware.process_request(request)
-    request.session.save()
-    response = RegistrationFormView.as_view()(request=request)
-    assert response.url == reverse(
-        'accounts:profile',
-        kwargs={'unique_id': request.user.unique_id}
-    )
+# @pytest.mark.django_db(transaction=True)
+# def test_post_registrationview():
+#     path = reverse('accounts:register')
+#     factory = RequestFactory()
+#     user = AnonymousUser()
+#     data = {
+#         'email': 'jza@aol.com',
+#         'password1': '16zs_90!mm416',
+#         'password2': '16zs_90!mm416',
+#     }
+#     request = factory.post(path, data)
+#     request.user = user
+#     middleware = SessionMiddleware(object)
+#     middleware.process_request(request)
+#     request.session.save()
+#     middleware = MessageMiddleware(object)
+#     middleware.process_request(request)
+#     request.session.save()
+#     response = RegistrationFormView.as_view()(request=request)
+#     assert response.url == reverse(
+#         'accounts:profile',
+#         kwargs={'unique_id': request.user.unique_id}
+#     )
 
 
-@pytest.mark.django_db(transaction=True)
-def test_post_registrationview_success_message():
-    path = reverse('accounts:register')
-    c = Client()
-    data = {
-        'email': 'az@gmail.com',
-        'password1': '16zs_90!mm416',
-        'password2': '16zs_90!mm416',
-    }
-    response = c.post(path, data)
-    messages = list(get_messages(response.wsgi_request))
-    assert str(messages[0]) == 'Welcome to the site az@gmail.com!'
+# @pytest.mark.django_db(transaction=True)
+# def test_post_registrationview_success_message():
+#     path = reverse('accounts:register')
+#     c = Client()
+#     data = {
+#         'email': 'az@gmail.com',
+#         'password1': '16zs_90!mm416',
+#         'password2': '16zs_90!mm416',
+#     }
+#     response = c.post(path, data)
+#     messages = list(get_messages(response.wsgi_request))
+#     assert str(messages[0]) == 'Welcome to the site az@gmail.com!'
 
 
-@pytest.mark.django_db(transaction=True)
-def test_post_loginview_success_message():
-    path = reverse('accounts:login')
-    c = Client()
-    user = User.objects.create_user(email='az@gmail.com')
-    user.set_password('waterwater12')
-    user.save()
-    data = {
-        'username': 'az@gmail.com',
-        'password': 'waterwater12',
-    }
-    response = c.post(path, data=data)
-    messages = list(get_messages(response.wsgi_request))
-    assert str(messages[0]) == f'Welcome back {user.email}!'
+# @pytest.mark.django_db(transaction=True)
+# def test_post_loginview_success_message():
+#     path = reverse('accounts:login')
+#     c = Client()
+#     user = User.objects.create_user(email='az@gmail.com')
+#     user.set_password('waterwater12')
+#     user.save()
+#     data = {
+#         'username': 'az@gmail.com',
+#         'password': 'waterwater12',
+#     }
+#     response = c.post(path, data=data)
+#     messages = list(get_messages(response.wsgi_request))
+#     assert str(messages[0]) == f'Welcome back {user.email}!'
 
 
 @pytest.fixture
@@ -108,15 +108,15 @@ def test_redirect_anonymous_to_login_from_profile():
     assert response.url == '/accounts/login?next=/accounts/profile/8db49825-244b-4ee9-a857-4da3cf40f380/'
 
 
-@pytest.mark.django_db(transaction=True)
-def test_redirect_authenticated_to_profile_from_login(user):
-    path = reverse('accounts:login')
-    c = Client()
-    user.set_password('waterwater12')
-    user.save()
-    data = {
-        'username': user.email,
-        'password': 'waterwater12',
-    }
-    response = c.post(path, data=data)
-    assert response.url == user.get_absolute_url()
+# @pytest.mark.django_db(transaction=True)
+# def test_redirect_authenticated_to_profile_from_login(user):
+#     path = reverse('accounts:login')
+#     c = Client()
+#     user.set_password('waterwater12')
+#     user.save()
+#     data = {
+#         'username': user.email,
+#         'password': 'waterwater12',
+#     }
+#     response = c.post(path, data=data)
+#     assert response.url == user.get_absolute_url()
