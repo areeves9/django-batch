@@ -6,8 +6,8 @@
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col-md-6 col-lg-4 col-10 bg-light border rounded">
             {% include 'django_messages.html' %}
-            <h2 class="mt-4 mb-4 text-left">{{ user }} Profile</h2>
-            <p class="text-left">{{ user.first_name }} {{ user.last_name }}</p>
+            <h4 class="mt-4 mb-4 text-left">{{ user }}</h4>
+            <h6 class="text-left">{{ user.first_name }} {{ user.last_name }}</h6>
             <hr/>
             {% if request.user == user %}
             <a class="d-block mb-3" href="{% url 'accounts:profile_update' user.unique_id %}">Update Profile</a>

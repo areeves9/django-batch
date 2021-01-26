@@ -10,15 +10,11 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
-from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth import (
-    get_user_model,
-    authenticate,
-    login
-)
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
@@ -163,7 +159,20 @@ class UserPasswordResetView(
     can enter a new password.
     '''
     form_class = UserPasswordResetForm
-    success_message = 'An email has been sent.'
+
+    def get_success_url(self):
+        return reverse_lazy('password_reset_complete')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            success_message = f'Password for {email} successfully updated!'
+            messages.success(request, success_message)
+            return redirect(self.get_success_url())
+        else:
+            form = self.form_class()
+            return form
 
 
 class UserPasswordResetConfirmView(
