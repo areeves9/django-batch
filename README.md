@@ -1,16 +1,12 @@
-# django-auth-bootstrap4
-A simple Django project comprised of a single custom authentication app, Accounts, to be used for any app requiring user email based authentication.
+# django-batch
+A Django project consisting of several applications for manaaging manufacturing
+information and data.
 
 # Project Background
-I wanted a reusable auth app that used the default Django authentication backend but with a custom auth user model, SiteUser, 
-with email set to username. 
-
-The Accounts app also contain custom views, such as an Activate view with will send a newly registered user an 
-activation URL via email. 
-
-Some of the default auth_views from django.contrib.auth have been overriden and have a new url in Accounts. 
-
-The Forms Django provides in django.contrib.auth have also been overriden for styling and functional purposes.
+Batch production records document manufacturing processes in regulated industires such as
+food and drugs. The batch record provides the steps undertaken, and all necessary equipment, 
+active ingredients, excipients and quality control data related to the manufacture of a product
+code.
 
 # Code Style
 This project attempts to adhere to the requirements of PEP8 and was developed with flake8 styling linter installed in the code editior.
